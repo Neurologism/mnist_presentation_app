@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     8: 0.04,
     9: 0.01,
   };
+  ImageProvider? drawing;
 
   @override
   void initState() {
@@ -31,6 +32,18 @@ class _HomePageState extends State<HomePage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+  }
+
+  int bestPrediction() {
+    int best = 0;
+    double bestValue = 0;
+    predictions.forEach((key, value) {
+      if (value > bestValue) {
+        best = key;
+        bestValue = value;
+      }
+    });
+    return best;
   }
 
   @override
@@ -66,15 +79,47 @@ class _HomePageState extends State<HomePage> {
     ),
     body: Column(
       children: [
+        SizedBox(
+          height: 100,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (drawing != null) Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2)
+                ),
+                child: Image(image: drawing!, fit: BoxFit.contain, height: 100, width: 100, filterQuality: FilterQuality.none,),
+              ),
+              Icon(Icons.arrow_forward_ios, size: 50, color: Colors.black,),
+              Padding(
+                padding: const EdgeInsets.only(right: 40),
+                child: Text(bestPrediction().toString(),
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+              ),
+            ],
+          ),
+        ),
         Expanded(
+          flex: 1,
           child: PredictionsDisplay(predictions: predictions)
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 16, right: 16, bottom: 128, top: 64),
-          child: DrawingBoard(
-            size: MediaQuery.of(context).size.width - 16,
+        Container(
+          height: 5,
+          color: Colors.blue[900],
+          width: MediaQuery.of(context).size.width,
+        ),
+        Expanded(
+          flex: 3,
+          child: MNISTDrawingBoard(
+            size: MediaQuery.of(context).size.width,
+            onChange: (newImage) {
+              setState(() {
+                drawing = newImage;
+              });
+            },
           ),
-        )
+        ),
       ],
     )
   );
