@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mnist_presentation_app/utils/predictor.dart';
 import 'package:mnist_presentation_app/widgets/drawing_board.dart';
 import 'package:mnist_presentation_app/widgets/predictions_display.dart';
+
+import 'logger.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Predictor predictor = Predictor();
   Map<int, double> predictions = {
     0: 0.1,
     1: 0.2,
@@ -73,7 +77,10 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           icon: const Icon(Icons.upload),
           color: Theme.of(context).colorScheme.onSecondary,
-          onPressed: () {},
+          onPressed: () async {
+            final result = await predictor.loadModel();
+            logger.i('Model loaded: $result');
+          },
         ),
       ],
     ),
@@ -113,9 +120,11 @@ class _HomePageState extends State<HomePage> {
           flex: 3,
           child: MNISTDrawingBoard(
             size: MediaQuery.of(context).size.width,
-            onChange: (newImage) {
+            onChange: (newImage) async {
+              final results = await predictor.evaluate(newImage);
               setState(() {
                 drawing = newImage;
+                predictions = results;
               });
             },
           ),

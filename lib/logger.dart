@@ -17,13 +17,13 @@ class Logger {
 
   void i(dynamic message) {
     if (kDebugMode) {
-      print('$_blue${_dateFormat.format(DateTime.now())} [INFO] $_name: $message$_reset');
+      print('$_blue${_dateFormat.format(DateTime.now())} $_name [INFO]: $message$_reset');
     }
   }
 
   void e(dynamic message, {StackTrace? stackTrace}) {
     if (kDebugMode) {
-      print('$_red${_dateFormat.format(DateTime.now())} [ERROR] $_name: $message$_reset');
+      print('$_red${_dateFormat.format(DateTime.now())} $_name [ERROR]: $message$_reset');
       if (stackTrace != null) {
         debugPrintStack(stackTrace: stackTrace, label: _name);
       }
@@ -32,28 +32,27 @@ class Logger {
 
   void w(dynamic message) {
     if (kDebugMode) {
-      print('$_yellow${_dateFormat.format(DateTime.now())} [WARNING] $_name: $message$_reset');
+      print('$_yellow${_dateFormat.format(DateTime.now())} $_name [WARNING]: $message$_reset');
     }
   }
 
   void f(dynamic message) {
     if (kDebugMode) {
-      print('$_magenta${_dateFormat.format(DateTime.now())} [FATAL] $_name: $message$_reset');
+      print('$_magenta${_dateFormat.format(DateTime.now())} $_name [FATAL]: $message$_reset');
     }
   }
 
   void d(dynamic message) {
     if (kDebugMode) {
-      print('$_magenta${_dateFormat.format(DateTime.now())} [DEBUG] $_name: $message$_reset');
+      print('$_magenta${_dateFormat.format(DateTime.now())} $_name [DEBUG]: $message$_reset');
     }
   }
 
   void database(String message) {
     if (kDebugMode) {
-      print('$_cyan${_dateFormat.format(DateTime.now())} [DATABASE] $_name: $message$_reset');
+      print('$_cyan${_dateFormat.format(DateTime.now())} $_name [DATABASE]: $message$_reset');
     }
   }
 }
 
-Logger logger = Logger('Lanis');
-Logger backgroundLogger = Logger('Lanis Background');
+Logger logger = Logger('WhitemindDemo');
